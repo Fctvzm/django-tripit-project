@@ -8,13 +8,14 @@ from .serializers import UserSerializer, TripSerializer, ItinerarySerializer, Re
 from .models import Category, Itinerary, Trip, Review, Schedule, Reservation
 
 class TripList(APIView):
-
-    def get(self, request):
-        trips = Trip.objects.all()
-        serializer = TripSerializer(trips, many=True)
-        return Response(serializer.data)
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	def get(self, request):
+		trips = Trip.objects.all()
+		serializer = TripSerializer(trips, many=True)
+		return Response(serializer.data)
 
 class TripDetail(APIView):
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 	def get_object(self, pk):
 		try:
 			trip = Trip.objects.get(pk=pk)
@@ -73,7 +74,7 @@ class ReviewList(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Reservation(APIView):
-
+	permission_classes = (permissions.AllowAny,)
 	def get_object(self, pk):
 		try:
 			trip = Trip.objects.get(pk=pk)
@@ -105,6 +106,7 @@ class Reservation(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ScheduleList(APIView):
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 	def get_object(self, pk):
 		try:
 			trip = Trip.objects.get(pk=pk)
@@ -120,14 +122,14 @@ class ScheduleList(APIView):
 		return Response(serializer.data)
 
 class CategoryList(APIView):
-
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 	def get(self, request):
 		categories = Category.objects.all()
 		serializer = CategorySerializer(categories, many=True)
 		return Response(serializer.data)
 
 class CategoryRecipe(APIView):
-
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 	def get_object(self, pk):
 		try:
 			category = Category.objects.get(pk=pk)
