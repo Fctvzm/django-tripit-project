@@ -2,11 +2,19 @@ from rest_framework import serializers
 from .models import Category, Itinerary, Trip, Review, Schedule, Reservation
 from django.contrib.auth.models import User
 
-class UserSerializer(serializers.Serializer):
+class UserCreateSerializer(serializers.ModelSerializer):
 	id = serializers.IntegerField(read_only=True)
 	username = serializers.CharField(max_length=300)
 	email = serializers.EmailField()
-	is_staff = serializers.BooleanField()
+	password = serializers.CharField(max_length=32, write_only=True, required=True)
+
+	class Meta:
+		model = User
+		fields = '__all__'
+
+class UserSerializer(serializers.Serializer):
+	username = serializers.CharField(max_length=300)
+	email = serializers.EmailField()
 
 class TripSerializer(serializers.ModelSerializer):
 	class Meta:
